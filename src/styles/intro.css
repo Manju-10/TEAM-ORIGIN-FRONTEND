@@ -1,0 +1,96 @@
+
+/* CONTAINER */
+.intro-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    animation: containerFadeIn 1s ease forwards;
+}
+
+/* LOGO */
+.logo {
+    width: 480px;
+    opacity: 0;
+    animation: logoFade 1.5s ease forwards;
+    animation-delay: 0.5s;
+}
+
+/* TAGLINE */
+.tagline {
+    font-family: 'Gloock', serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: #D99726;
+    margin-top: 12px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: taglineFade 1s ease forwards;
+    animation-delay: 1.8s;
+}
+
+/* LINE */
+.line {
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #D99726;
+    margin-top: 12px;
+    animation: lineGrow 0.8s ease forwards;
+    animation-delay: 2.8s;
+}
+
+/* FADE OUT */
+body.fade-out {
+    animation: fadeOut 0.6s ease forwards;
+}
+
+/* KEYFRAMES */
+@keyframes logoFade {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes taglineFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes lineGrow {
+    to {
+        width: 120px;
+    }
+}
+
+@keyframes containerFadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .logo {
+        width: 350px;
+    }
+
+    .tagline {
+        font-size: 12px;
+    }
+
+    .line {
+        height: 1.5px;
+    }
+}
