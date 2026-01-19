@@ -8,6 +8,7 @@ import emailIcon from "../assets/email_icon.svg";
 import phoneIcon from "../assets/phone_icon.svg";
 import lockIcon from "../assets/lock_icon.svg";
 import bgImage from "../assets/register_image.jpg";
+import axios from "axios";
 
 function Register() {
   const formContainerRef = useRef(null);
@@ -27,45 +28,56 @@ function Register() {
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
   };
 
-  const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    const user = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      mobile: e.target.mobile.value,
+      password: e.target.password.value,
+    };
+    const response = await axios.post(
+      "https://origin-backnd.onrender.com/auth/register",
+      user,
+    );
+    console.log("Server Response:", response);
+    if (response.status === 200) {
+      alert("Registration Successfull");
+    }
 
-  let newErrors = {};
+    let newErrors = {};
 
-  if (!form.name.trim()) newErrors.name = "*Full name is required";
-  if (!form.email.trim()) newErrors.email = "*Email is required";
-  if (!form.mobile.trim()) newErrors.mobile = "*Mobile number is required";
-  if (!form.password.trim()) newErrors.password = "*Password is required";
-  if (!form.confirmPassword.trim())
-    newErrors.confirmPassword = "*Confirm your password";
-  if (form.password !== form.confirmPassword)
-    newErrors.confirmPassword = "*Passwords do not match";
-  if (!form.agree) newErrors.agree = "*You must agree to the terms";
+    if (!form.name.trim()) newErrors.name = "*Full name is required";
+    if (!form.email.trim()) newErrors.email = "*Email is required";
+    if (!form.mobile.trim()) newErrors.mobile = "*Mobile number is required";
+    if (!form.password.trim()) newErrors.password = "*Password is required";
+    if (!form.confirmPassword.trim())
+      newErrors.confirmPassword = "*Confirm your password";
+    if (form.password !== form.confirmPassword)
+      newErrors.confirmPassword = "*Passwords do not match";
+    if (!form.agree) newErrors.agree = "*You must agree to the terms";
 
-  setErrors(newErrors);
+    setErrors(newErrors);
 
-  if (Object.keys(newErrors).length > 0) {
-    setTimeout(() => {
-      const firstError = document.querySelector(".input-wrapper.error");
-      const container = formContainerRef.current;
+    if (Object.keys(newErrors).length > 0) {
+      setTimeout(() => {
+        const firstError = document.querySelector(".input-wrapper.error");
+        const container = formContainerRef.current;
 
-      if (firstError && container) {
-        const containerTop = container.getBoundingClientRect().top;
-        const errorTop = firstError.getBoundingClientRect().top;
+        if (firstError && container) {
+          const containerTop = container.getBoundingClientRect().top;
+          const errorTop = firstError.getBoundingClientRect().top;
 
-        container.scrollTo({
-          top: container.scrollTop + (errorTop - containerTop) - 120,
-          behavior: "smooth",
-        });
-      }
-    }, 0);
-    return;
-  }
+          container.scrollTo({
+            top: container.scrollTop + (errorTop - containerTop) - 120,
+            behavior: "smooth",
+          });
+        }
+      }, 0);
+      return;
+    }
 
-  alert("Account created successfully (Demo)");
-};
-
-
+    alert("Account created successfully (Demo)");
+  };
 
   return (
     <div className="auth-container">

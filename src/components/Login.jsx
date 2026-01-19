@@ -6,24 +6,32 @@ import logoWhite from "../assets/logo_white.svg";
 import emailIcon from "../assets/email_icon.svg";
 import lockIcon from "../assets/lock_icon.svg";
 import bgImage from "../assets/sign_in_image.png";
+import axios from "axios";
 
-function SignIn() {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let valid = true;
 
     setEmailError("");
     setPasswordError("");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const mobileRegex = /^[0-9]{10}$/;
 
     if (email.trim() === "") {
       setEmailError("*Email or mobile number is required");
+      valid = false;
+    }
+
+    if (!emailRegex.test(email) && !mobileRegex.test(email)) {
+      setEmailError("*Please enter a valid Email or 10-digit Mobile Number");
       valid = false;
     }
 
@@ -33,7 +41,21 @@ function SignIn() {
     }
 
     if (valid) {
-      alert("Sign in successful (Demo)");
+      let isEmail = emailRegex.test(email);
+      let isMobile = mobileRegex.test(email);
+      const payload = {
+        email: isEmail ? email : null,
+        mobile: isMobile ? email : null,
+        password: password,
+      };
+      const response = await axios.post(
+        "https://origin-backnd.onrender.com/auth/login",
+        payload,
+      );
+      console.log(response);
+      if (response.status === 200) {
+        alert("Logged In Succesfully");
+      }
     }
   };
 
@@ -124,7 +146,8 @@ function SignIn() {
 
           <h4>Where Style Begins</h4>
           <p>
-            Premium quality t-shirts crafted with care for the modern individual.
+            Premium quality t-shirts crafted with care for the modern
+            individual.
           </p>
         </div>
       </div>
@@ -132,4 +155,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default Login;
