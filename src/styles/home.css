@@ -340,7 +340,7 @@ body {
     left: 10%;
     color: white;
     z-index: 2;
-    max-width: 450px;
+    max-width: 550px;
 }
 
 .hero-content h1 {
@@ -358,15 +358,16 @@ body {
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
-.shop {
+.buttons .shop {
     background: linear-gradient(90deg, var(--primary), var(--accent));
     color: white;
+    border: 2px solid var(--primary);
 }
 
-.view {
+.buttons .view {
     background: transparent;
     color: white;
     border: 1px solid white;
@@ -513,23 +514,24 @@ body {
         width: 36px;
         height: 36px;
     }
-
+    
     .features {
-        gap: 15px;
-    }
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 30px 4%;
+        }
 
     .feature-box h4 {
-        font-size: 14px;
-        margin-top: 3px;
-        margin-bottom: 3px;
+        font-size: 18px;
+        margin-top: 2px;
+        margin-bottom: 4px;
     }
 
     .feature-box p {
-        font-size: 9px;
+        font-size: 12px;
     }
 }
-
-/* ================= MOBILE VIEW ================= */
 
 /* ================= 860px FIX ================= */
 @media (max-width: 860px) and (min-width: 769px) {
@@ -556,6 +558,8 @@ body {
         /* Pulls icons closer together */
     }
 }
+
+/* ================= MOBILE VIEW ================= */
 
 @media (max-width: 768px) {
 
@@ -669,12 +673,12 @@ body {
 
     .feature-box h4 {
         font-size: 14px;
-        margin-top: 15px;
-        margin-bottom: 3px;
+        margin-top: 14px;
+        margin-bottom: 6px;
     }
 
     .feature-box p {
-        font-size: 8px;
+        font-size: 9px;
     }
 
     .address-modal {
@@ -694,4 +698,50 @@ body {
     .side-menu {
         width: 85%;
     }
+
+    .features {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 30px 4%;
+    }
+
+    .feature-box {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 20px; 
+        gap: 40px; 
+    }
+
+    .icon-box {
+        background: var(--soft);
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        flex-shrink: 0; 
+    }
+
+    .feature-box > div:last-child {
+        text-align: left;
+        margin: 0; 
+    }
+
+    .icon-box img {
+        width: 35px;
+    }
+
+    .feature-box h4 {
+        font-size: 18px;
+        margin-top: 12px;
+        margin-bottom: 6px;
+    }
+
+    .feature-box p {
+        font-size: 12px;
+    }
+    
 }
