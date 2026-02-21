@@ -26,6 +26,12 @@ import shippingIcon from "../assets/shipping_icon.svg";
 import qualityIcon from "../assets/quality_icon.svg";
 import returnIcon from "../assets/return_icon.svg";
 import ratingStarIcon from "../assets/ratingstar_icon.svg";
+import menImg from "../assets/men.jpg";
+import womenImg from "../assets/women.jpg";
+import kidsImg from "../assets/kids.jpg";
+import oversizedImg from "../assets/oversized.webp";
+import minimalImg from "../assets/minimal.jpg";
+import printedImg from "../assets/printed.jpg";
 
 function Home() {
   // --- STATE FOR HERO SLIDER ---
@@ -284,6 +290,70 @@ function Home() {
           <div>
             <h4>Top Rated</h4>
             <p>4.3/5 customer rating</p>
+          </div>
+        </div>
+      </section>
+      
+      {/* ================= SHOP BY CATEGORY ================= */}
+      <section className="shop-category">
+        <div className="container">
+          <h2>Shop by Category</h2>
+          <p className="subtitle">Find your perfect style</p>
+
+          <div className="category-grid">
+            {/* Card 1 */}
+            <Link to="#" className="category-card">
+              <img src={menImg} alt="Men" />
+              <div className="category-overlay">
+                <h3>Men</h3>
+                <span>Shop Now</span>
+              </div>
+            </Link>
+
+            {/* Card 2 */}
+            <Link to="#" className="category-card">
+              <img src={womenImg} alt="Women" />
+              <div className="category-overlay">
+                <h3>Women</h3>
+                <span>Shop Now</span>
+              </div>
+            </Link>
+
+            {/* Card 3 */}
+            <Link to="#" className="category-card">
+              <img src={kidsImg} alt="Kids" />
+              <div className="category-overlay">
+                <h3>Kids</h3>
+                <span>Shop Now</span>
+              </div>
+            </Link>
+
+            {/* Card 4 */}
+            <Link to="#" className="category-card">
+              <img src={oversizedImg} alt="Oversized" />
+              <div className="category-overlay">
+                <h3>Oversized</h3>
+                <span>Shop Now</span>
+              </div>
+            </Link>
+
+            {/* Card 5 */}
+            <Link to="#" className="category-card">
+              <img src={minimalImg} alt="Minimal" />
+              <div className="category-overlay">
+                <h3>Minimal</h3>
+                <span>Shop Now</span>
+              </div>
+            </Link>
+
+            {/* Card 6 */}
+            <Link to="#" className="category-card">
+              <img src={printedImg} alt="Printed" />
+              <div className="category-overlay">
+                <h3>Printed</h3>
+                <span>Shop Now</span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>

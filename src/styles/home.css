@@ -19,6 +19,23 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+/* FONT HELPERS */
+.gloock {
+    font-family: 'Gloock', serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.poppins {
+    font-family: 'Poppins', sans-serif;
+}
+
+.inter {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+}
+
 /* HEADER */
 .header {
     display: flex;
@@ -462,6 +479,80 @@ body {
     color: var(--dark-gray);
 }
 
+/* ================= SHOP BY CATEGORY ================= */
+.shop-category {
+    padding: 60px 20px;
+    background: #f5f3ef;
+    text-align: center;
+}
+
+.shop-category h2 {
+    font-family: 'Gloock', serif;
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #777;
+    margin-bottom: 40px;
+}
+
+/* GRID */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+}
+
+/* CARD */
+.category-card {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    text-decoration: none;
+    height: 260px;
+    display: block;
+    /* Important for <a> tags acting as cards! */
+}
+
+/* IMAGE */
+.category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.4s ease;
+}
+
+/* GRADIENT OVERLAY */
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    color: white;
+    text-align: left;
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.85),
+            rgba(0, 0, 0, 0.5),
+            transparent);
+}
+
+.category-overlay h3 {
+    font-family: 'Gloock', serif;
+    margin: 0;
+    font-size: 20px;
+}
+
+.category-overlay span {
+    font-size: 10px;
+    text-decoration: underline;
+}
+
+/* HOVER EFFECT */
+.category-card:hover img {
+    transform: scale(1.08);
+}
+
 /* ================= TABLET VIEW ================= */
 @media (max-width: 1024px) and (min-width: 769px) {
     .mobile-top {
@@ -514,13 +605,13 @@ body {
         width: 36px;
         height: 36px;
     }
-    
+
     .features {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            padding: 30px 4%;
-        }
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 30px 4%;
+    }
 
     .feature-box h4 {
         font-size: 18px;
@@ -558,6 +649,19 @@ body {
         /* Pulls icons closer together */
     }
 }
+
+/* SMALL TABLET FIX */
+@media (max-width: 820px) and (min-width: 769px) {
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .category-card {
+        height: 220px;
+    }
+}
+
+
 
 /* ================= MOBILE VIEW ================= */
 
@@ -692,7 +796,18 @@ body {
     .save-address-btn {
         width: 100%;
     }
+
+    /* Shop by category*/
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .category-card {
+        height: 180px;
+    }
+
 }
+
 
 @media (max-width: 480px) {
     .side-menu {
@@ -710,8 +825,8 @@ body {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding-left: 20px; 
-        gap: 40px; 
+        padding-left: 20px;
+        gap: 40px;
     }
 
     .icon-box {
@@ -722,12 +837,12 @@ body {
         align-items: center;
         justify-content: center;
         border-radius: 12px;
-        flex-shrink: 0; 
+        flex-shrink: 0;
     }
 
-    .feature-box > div:last-child {
+    .feature-box>div:last-child {
         text-align: left;
-        margin: 0; 
+        margin: 0;
     }
 
     .icon-box img {
@@ -743,5 +858,14 @@ body {
     .feature-box p {
         font-size: 12px;
     }
-    
+
+    /* Shop by category*/
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .category-card {
+        height: 140px;
+    }
+
 }
