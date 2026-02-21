@@ -1,0 +1,294 @@
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "../styles/home.css";
+
+// Asset Imports
+import logoBlack from "../assets/logo_black.svg";
+import searchIcon from "../assets/search_icon.svg";
+import mapPinIcon from "../assets/map_pin_icon.svg";
+import wishlistIcon from "../assets/wishlist_icon.svg";
+import bellIcon from "../assets/bell_icon.svg";
+import cartIcon from "../assets/cart_icon.svg";
+import userIcon from "../assets/user_icon.svg";
+import menuIcon from "../assets/menu_icon.svg";
+import categoriesIcon from "../assets/Categories_icon.svg";
+import newArrivalsIcon from "../assets/New_arrivals_icon.svg";
+import trendingIcon from "../assets/Trending_collections_icon.svg";
+import featuredIcon from "../assets/Featured_collections_icon.svg";
+import bestSellersIcon from "../assets/Best_Sellers_icon.svg";
+import contactUsIcon from "../assets/contact_us_icon.svg";
+import settingsIcon from "../assets/settings_icon.svg";
+import locationIcon from "../assets/location_icon.svg";
+import heroImg1 from "../assets/hero_img_1.png";
+import heroImg2 from "../assets/hero_img_2.avif";
+import heroImg3 from "../assets/hero_img_3.jpg";
+import shippingIcon from "../assets/shipping_icon.svg";
+import qualityIcon from "../assets/quality_icon.svg";
+import returnIcon from "../assets/return_icon.svg";
+import ratingStarIcon from "../assets/ratingstar_icon.svg";
+
+function Home() {
+  // --- STATE FOR HERO SLIDER ---
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slideImages = [heroImg1, heroImg2, heroImg3];
+
+  useEffect(() => {
+    const slideInterval = setInterval(() => {
+      setCurrentSlide((prevIndex) => (prevIndex + 1) % slideImages.length);
+    }, 4000);
+    return () => clearInterval(slideInterval);
+  }, [slideImages.length]);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slideImages.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slideImages.length) % slideImages.length);
+
+  // --- STATE FOR SIDE MENU ---
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // --- STATE FOR ADDRESS MODAL ---
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Inputs in the modal
+  const [userAddressInput, setUserAddressInput] = useState("");
+  const [deliveryAddressInput, setDeliveryAddressInput] = useState("");
+
+  // Initialize state directly from localStorage
+  const [headerAddress, setHeaderAddress] = useState(() => {
+    return localStorage.getItem("userAddress") || "No: 101, Main Road, Chennai";
+  });
+
+  const [headerDelivery, setHeaderDelivery] = useState(() => {
+    return localStorage.getItem("deliveryAddress") || ">>> Add delivery location";
+  });
+ 
+
+  const handleSaveAddress = () => {
+    if (userAddressInput.trim() === "") {
+      alert("Please enter your address");
+      return;
+    }
+
+    // Save to localStorage
+    localStorage.setItem("userAddress", userAddressInput);
+    localStorage.setItem("deliveryAddress", deliveryAddressInput);
+
+    // Update Header Text
+    setHeaderAddress(userAddressInput);
+    if (deliveryAddressInput.trim() !== "") {
+      setHeaderDelivery(deliveryAddressInput);
+    }
+
+    // Close Modal
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      {/* ================= HEADER ================= */}
+      <header className="header">
+        <div className="header-logo">
+          <img src={logoBlack} alt="ORIGIN" />
+        </div>
+
+        <div className="search-desktop">
+          <img src={searchIcon} className="search-icon" alt="search" />
+          <input type="text" placeholder="Search your perfect drop..." />
+        </div>
+
+        {/* CLICKABLE LOCATION */}
+        <div className="location-desktop" onClick={() => setIsModalOpen(true)}>
+          <img src={mapPinIcon} alt="pin" />
+          <span>{headerAddress}</span>
+        </div>
+
+        <div className="icons">
+          <Link to="#"><img src={wishlistIcon} alt="Wishlist" /></Link>
+          <Link to="#"><img src={bellIcon} alt="Notifications" /></Link>
+          <Link to="#"><img src={cartIcon} alt="Cart" /></Link>
+          <Link to="#"><img src={userIcon} alt="User" /></Link>
+          <button className="menu-btn" onClick={() => setIsMenuOpen(true)}>
+            <img src={menuIcon} alt="Menu" />
+          </button>
+        </div>
+      </header>
+
+      {/* ================= SIDE MENU ================= */}
+      <div 
+        className={`menu-overlay ${isMenuOpen ? "active" : ""}`} 
+        onClick={() => setIsMenuOpen(false)}
+      ></div>
+
+      <div className={`side-menu ${isMenuOpen ? "active" : ""}`}>
+        <div className="menu-header">
+          <img src={logoBlack} className="menu-logo" alt="ORIGIN" />
+          <button className="close-menu" onClick={() => setIsMenuOpen(false)}>&times;</button>
+        </div>
+
+        <ul className="menu-list">
+          <li>
+            <img src={categoriesIcon} alt="Categories" />
+            <Link to="#" onClick={() => setIsMenuOpen(false)}>Categories</Link>
+          </li>
+          <li>
+            <img src={newArrivalsIcon} alt="New Arrivals" />
+            <Link to="#" onClick={() => setIsMenuOpen(false)}>New Arrivals</Link>
+          </li>
+          <li>
+            <img src={trendingIcon} alt="Trending" />
+            <Link to="#" onClick={() => setIsMenuOpen(false)}>Trending Collections</Link>
+          </li>
+          <li>
+            <img src={featuredIcon} alt="Featured" />
+            <Link to="#" onClick={() => setIsMenuOpen(false)}>Featured Collections</Link>
+          </li>
+          <li>
+            <img src={bestSellersIcon} alt="Best Sellers" />
+            <Link to="#" onClick={() => setIsMenuOpen(false)}>Best Sellers</Link>
+          </li>
+          <hr />
+          <li>
+            <img src={userIcon} alt="Profile" />
+            <Link to="#" onClick={() => setIsMenuOpen(false)}>My Profile</Link>
+          </li>
+          <li>
+            <img src={contactUsIcon} alt="Contact" />
+            <Link to="#" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
+          </li>
+          <hr />
+          <li>
+            <img src={settingsIcon} alt="Settings" />
+            <Link to="#" onClick={() => setIsMenuOpen(false)}>Settings</Link>
+          </li>
+        </ul>
+      </div>
+
+      {/* ================= MOBILE SEARCH + LOCATION ================= */}
+      <div className="mobile-top">
+        <div className="search-mobile">
+          <img src={searchIcon} className="search-icon" alt="search" />
+          <input type="text" placeholder="Search your perfect drop..." />
+        </div>
+
+        <div className="location-mobile-row">
+          <div className="location-left" onClick={() => setIsModalOpen(true)}>
+            <img src={mapPinIcon} alt="pin" />
+            <span>{headerAddress}</span>
+          </div>
+
+          <div className="location-right" onClick={() => setIsModalOpen(true)}>
+            {headerDelivery}
+          </div>
+        </div>
+      </div>
+
+      {/* ================= LOCATION POP-UP ================= */}
+      {isModalOpen && (
+        <div className="modal" style={{ display: "flex" }}>
+          <div className="address-modal">
+            <span className="close" onClick={() => setIsModalOpen(false)}>&times;</span>
+            <h2 className="address-title">Add Your Address</h2>
+
+            <div className="address-form">
+              <label>Enter Your Address</label>
+              <div className="input-box">
+                <img src={locationIcon} alt="location" />
+                <input 
+                  type="text" 
+                  placeholder="Enter your location"
+                  value={userAddressInput}
+                  onChange={(e) => setUserAddressInput(e.target.value)}
+                />
+              </div>
+
+              <label>Enter Delivery Address</label>
+              <div className="input-box">
+                <img src={locationIcon} alt="location" />
+                <input 
+                  type="text" 
+                  placeholder="Enter delivery location"
+                  value={deliveryAddressInput}
+                  onChange={(e) => setDeliveryAddressInput(e.target.value)}
+                />
+              </div>
+
+              <button className="save-address-btn" onClick={handleSaveAddress}>
+                Save Address
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= HERO ================= */}
+      <section className="hero">
+        <div className="slider">
+          <div className="slides" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+            {slideImages.map((imgSrc, index) => (
+              <div className="slide" key={index}>
+                <img src={imgSrc} alt={`Slide ${index + 1}`} />
+              </div>
+            ))}
+          </div>
+
+          <div className="overlay"></div>
+
+          <div className="hero-content">
+            <h1 className="gloock">Limited Edition</h1>
+            <p>ORIGIN – Crafted with precision, designed for excellence.</p>
+            <div className="buttons">
+              <button className="shop">Shop Now →</button>
+              <button className="view">View Collections</button>
+            </div>
+          </div>
+
+          <button className="prev" onClick={prevSlide}>&#10094;</button>
+          <button className="next" onClick={nextSlide}>&#10095;</button>
+
+          <div className="dots">
+            {slideImages.map((_, index) => (
+              <span
+                key={index}
+                className={`dot ${currentSlide === index ? "active" : ""}`}
+                onClick={() => setCurrentSlide(index)}
+              ></span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= FEATURES ================= */}
+      <section className="features">
+        <div className="feature-box">
+          <div className="icon-box"><img src={shippingIcon} alt="Shipping" /></div>
+          <div>
+            <h4>Free Shipping</h4>
+            <p>On orders above $999</p>
+          </div>
+        </div>
+        <div className="feature-box">
+          <div className="icon-box"><img src={qualityIcon} alt="Quality" /></div>
+          <div>
+            <h4>Premium Quality</h4>
+            <p>100% organic fabric</p>
+          </div>
+        </div>
+        <div className="feature-box">
+          <div className="icon-box"><img src={returnIcon} alt="Returns" /></div>
+          <div>
+            <h4>Easy Returns</h4>
+            <p>7 days return policy</p>
+          </div>
+        </div>
+        <div className="feature-box">
+          <div className="icon-box"><img src={ratingStarIcon} alt="Rating" /></div>
+          <div>
+            <h4>Top Rated</h4>
+            <p>4.3/5 customer rating</p>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+export default Home;

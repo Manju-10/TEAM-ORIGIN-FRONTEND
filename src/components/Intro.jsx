@@ -13,7 +13,7 @@ function Intro() {
     }, 5200);
 
     const redirectTimer = setTimeout(() => {
-      navigate("/sign_in"); // SPA navigation
+      navigate("/home"); // SPA navigation
     }, 5800);
 
     return () => {
