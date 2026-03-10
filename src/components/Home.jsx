@@ -108,9 +108,14 @@ function Home() {
         </div>
 
         <div className="icons">
-          <Link to="#"><img src={wishlistIcon} alt="Wishlist" /></Link>
+          <Link to="#" style={{ position: "relative" }}><img src={wishlistIcon} alt="Wishlist" />
+            <span className="nav-badge" id="wishlist-badge">0</span></Link>
+          
           <Link to="#"><img src={bellIcon} alt="Notifications" /></Link>
-          <Link to="#"><img src={cartIcon} alt="Cart" /></Link>
+
+          <Link to="#" style={{ position: "relative" }}><img src={cartIcon} alt="Cart" />
+            <span className="nav-badge" id="cart-badge">0</span></Link>
+          
           <Link to="#"><img src={userIcon} alt="User" /></Link>
           <button className="menu-btn" onClick={() => setIsMenuOpen(true)}>
             <img src={menuIcon} alt="Menu" />
