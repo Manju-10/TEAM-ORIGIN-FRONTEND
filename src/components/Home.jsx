@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/home.css";
 
 // Asset Imports
@@ -32,6 +32,12 @@ import kidsImg from "../assets/kids.jpg";
 import oversizedImg from "../assets/oversized.webp";
 import minimalImg from "../assets/minimal.jpg";
 import printedImg from "../assets/printed.jpg";
+import productImg1 from "../assets/product-img-1.jpg";
+import productImg2 from "../assets/product-img-2.jpg";
+import productImg3 from "../assets/product-img-3.jpg";
+import productImg4 from "../assets/product-img-4.jpg";
+import starIcon from "../assets/star_icon.svg";
+import wishlistIconFilled from "../assets/wishlist_icon_filled.svg";
 
 function Home() {
   // --- STATE FOR HERO SLIDER ---
@@ -66,6 +72,73 @@ function Home() {
   const [headerDelivery, setHeaderDelivery] = useState(() => {
     return localStorage.getItem("deliveryAddress") || ">>> Add delivery location";
   });
+
+  // --- NEW ARRIVALS STATE & LOGIC ---
+  const navigate = useNavigate();
+
+  // Load wishlist and cart from local storage
+  const [wishlist, setWishlist] = useState(() => {
+    return JSON.parse(localStorage.getItem("wishlist")) || [];
+  });
+  const [cart, setCart] = useState(() => {
+    return JSON.parse(localStorage.getItem("cart")) || [];
+  });
+
+  // For mobile "tap to view quick view"
+  const [activeQuickView, setActiveQuickView] = useState(null);
+
+  // Automatically save to local storage when state changes
+  useEffect(() => {
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  }, [wishlist]);
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  // Click Handlers
+  const toggleWishlist = (e, product) => {
+    e.stopPropagation(); // Stop click from opening the product page
+    setWishlist((prev) => {
+      const exists = prev.find((item) => item.id === product.id);
+      if (exists) return prev.filter((item) => item.id !== product.id); // Remove
+      return [...prev, product]; // Add
+    });
+  };
+
+  const toggleCart = (e, product) => {
+    e.stopPropagation(); // Stop click from opening the product page
+    setCart((prev) => {
+      const exists = prev.find((item) => item.id === product.id);
+      if (exists) return prev.filter((item) => item.id !== product.id); // Remove
+      return [...prev, { ...product, quantity: 1 }]; // Add
+    });
+  };
+
+  const openProduct = (productId) => {
+    localStorage.setItem("selectedProduct", productId);
+    navigate("/product"); // Ensure you have a route set up for "/product"
+  };
+ 
+  // Product Data Array
+  const newArrivals = [
+    { 
+      id: "p1", name: "Forest Green Minimal", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "120", image: productImg1, category: "Women",
+      badgeText: "NEW", discount: "14%" 
+    },
+    { 
+      id: "p2", name: "Purple Classic", price: "589.0", oldPrice: "650", rating: "4.6", reviews: "117", image: productImg2, category: "Men",
+      badgeText: "HOT", discount: "20%" 
+    },
+    { 
+      id: "p3", name: "White Graphic", price: "589.0", oldPrice: "650", rating: "4.4", reviews: "107", image: productImg3, category: "Women",
+      badgeText: "NEW", discount: "15%" 
+    },
+    { 
+      id: "p4", name: "White Hotel", price: "589.0", oldPrice: "650", rating: "4.5", reviews: "115", image: productImg4, category: "Men",
+      badgeText: "NEW", discount: "12%" 
+    }
+  ];
  
 
   const handleSaveAddress = () => {
@@ -108,13 +181,21 @@ function Home() {
         </div>
 
         <div className="icons">
-          <Link to="#" style={{ position: "relative" }}><img src={wishlistIcon} alt="Wishlist" />
-            <span className="nav-badge" id="wishlist-badge">0</span></Link>
+          <Link to="#" style={{ position: "relative" }}>
+            <img src={wishlistIcon} alt="Wishlist" />
+            <span className={`nav-badge ${wishlist.length > 0 ? "show" : ""}`}>
+              {wishlist.length}
+            </span>
+          </Link>
           
           <Link to="#"><img src={bellIcon} alt="Notifications" /></Link>
 
-          <Link to="#" style={{ position: "relative" }}><img src={cartIcon} alt="Cart" />
-            <span className="nav-badge" id="cart-badge">0</span></Link>
+          <Link to="#" style={{ position: "relative" }}>
+            <img src={cartIcon} alt="Cart" />
+            <span className={`nav-badge ${cart.length > 0 ? "show" : ""}`}>
+              {cart.length}
+            </span>
+          </Link>
           
           <Link to="#"><img src={userIcon} alt="User" /></Link>
           <button className="menu-btn" onClick={() => setIsMenuOpen(true)}>
@@ -361,7 +442,90 @@ function Home() {
             </Link>
           </div>
         </div>
-      </section>
+        </section>
+
+      {/* ================= NEW ARRIVALS ================= */}
+      <section className="new-arrivals">
+        <div className="section-header">
+          <div>
+            <h2>New Arrivals</h2>
+            <span className="sub">JUST DROPPED</span>
+          </div>
+          <Link to="#" className="view-all">View All →</Link>
+        </div>
+
+        <div className="products-grid">
+          {newArrivals.map((product) => {
+            const isWishlisted = wishlist.some((item) => item.id === product.id);
+            const isCarted = cart.some((item) => item.id === product.id);
+
+            return (
+              <div 
+                key={product.id} 
+                className={`product-card ${activeQuickView === product.id ? "show-quick" : ""}`}
+                onClick={(e) => {
+                  // Mobile tap logic to show quick view first
+                  if (window.matchMedia("(hover: none)").matches) {
+                    if (activeQuickView !== product.id) {
+                      e.preventDefault();
+                      setActiveQuickView(product.id);
+                      return;
+                    }
+                  }
+                  openProduct(product.id);
+                }}
+              >
+                <div className="product-image">
+                  {/* Dynamically render the "NEW" / "HOT" badge ONLY if it exists */}
+          {product.badgeText && (
+            <span className="badge new">{product.badgeText}</span>
+          )}
+
+          {/* Dynamically render the discount badge ONLY if it exists */}
+          {product.discount && (
+            <span className="badge discount">{product.discount}</span>
+          )}
+
+                  {/* Wishlist */}
+                  <div 
+                    className={`icon-wrapper wishlist-icon-filled ${isWishlisted ? "active" : ""}`}
+                    onClick={(e) => toggleWishlist(e, product)}
+                  >
+                    <img src={wishlistIconFilled} alt="Wishlist" />
+                  </div>
+
+                  {/* Cart */}
+                  <div 
+                    className={`icon-wrapper cart-icon ${isCarted ? "added" : ""}`}
+                    onClick={(e) => toggleCart(e, product)}
+                  >
+                    <img src={cartIcon} alt="Cart" />
+                  </div>
+
+                  <img src={product.image} className="product-img" alt={product.name} />
+                  <button className="quick-view">Quick View</button>
+                </div>
+
+                <div className="product-info">
+                  <div className="price-row">
+                    <div className="price-group">
+                      <span className="price">₹{product.price}</span>
+                      <span className="old-price">₹{product.oldPrice}</span>
+                    </div>
+                    <div className="rating">
+                      <img src={starIcon} className="star-icon" alt="Star" />
+                      <span className="rating-value">{product.rating} </span>
+                      <span className="rating-count">({product.reviews})</span>
+                    </div>
+                  </div>
+                  <h4>{product.name}</h4>
+                  <p className="category">{product.category}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>  
     </>
   );
 }
