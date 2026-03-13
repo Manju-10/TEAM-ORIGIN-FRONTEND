@@ -590,7 +590,7 @@ body {
 
 /* ================= NEW ARRIVALS ================= */
 
-.new-arrivals {
+.product-section {
     padding: 60px 5%;
     background: var(--light-bg);
 }
@@ -703,13 +703,22 @@ body {
     background: var(--accent);
 }
 
+.badge.trending {
+    top: 12px;
+    background: var(--accent);
+    min-width: 75px;
+    padding: 0 10px;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+}
+
 .badge.discount {
     top: 42px;
     background: #2ecc71;
 }
 
 .badge,
-.wishlist-icon,
+.wishlist-icon-filled,
 .cart-icon {
     z-index: 3;
 }
@@ -963,7 +972,7 @@ body {
         font-size: 12px;
     }
 
-    /* New Arrival */
+    /* Product-Section New Arrival */
     .products-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -992,21 +1001,17 @@ body {
 
     .search-desktop {
         flex: 1 1 140px;
-        /* Allows search bar to shrink more */
         min-width: 140px;
     }
 
     .location-desktop {
         display: flex !important;
-        /* Forces it to stay visible */
         flex: 0 1 120px;
         font-size: 11px;
-        /* Slightly smaller text to fit */
     }
 
     .icons img {
         margin-left: 8px;
-        /* Pulls icons closer together */
     }
 }
 

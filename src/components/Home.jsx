@@ -38,6 +38,10 @@ import productImg3 from "../assets/product-img-3.jpg";
 import productImg4 from "../assets/product-img-4.jpg";
 import starIcon from "../assets/star_icon.svg";
 import wishlistIconFilled from "../assets/wishlist_icon_filled.svg";
+import trendingImg1 from "../assets/trending_img_1.jpg";
+import trendingImg2 from "../assets/trending_img_2.jpg";
+import trendingImg3 from "../assets/trending_img_3.jpg";
+import trendingImg4 from "../assets/trending_img_4.png";
 
 function Home() {
   // --- STATE FOR HERO SLIDER ---
@@ -120,7 +124,7 @@ function Home() {
     navigate("/product"); // Ensure you have a route set up for "/product"
   };
  
-  // Product Data Array
+  // New Arrivals Product Data Array
   const newArrivals = [
     { 
       id: "p1", name: "Forest Green Minimal", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "120", image: productImg1, category: "Women",
@@ -139,7 +143,26 @@ function Home() {
       badgeText: "NEW", discount: "12%" 
     }
   ];
- 
+
+  // Trending Now Product Data Array
+  const trendingProducts = [
+    { 
+      id: "t1", name: "Black Classic Wear", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "117", image: trendingImg1, category: "Women",
+      badgeText: "TRENDING" // Custom badge text
+    },
+    { 
+      id: "t2", name: "White Oversized", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "117", image: trendingImg2, category: "Men",
+      badgeText: "TRENDING" 
+    },
+    { 
+      id: "t3", name: "Black Printed", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "117", image: trendingImg3, category: "Men",
+      badgeText: "TRENDING" 
+    },
+    { 
+      id: "t4", name: "White Minimal", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "117", image: trendingImg4, category: "Women",
+      badgeText: "TRENDING" 
+    }
+  ];
 
   const handleSaveAddress = () => {
     if (userAddressInput.trim() === "") {
@@ -445,7 +468,7 @@ function Home() {
         </section>
 
       {/* ================= NEW ARRIVALS ================= */}
-      <section className="new-arrivals">
+      <section className="product-section">
         <div className="section-header">
           <div>
             <h2>New Arrivals</h2>
@@ -525,7 +548,85 @@ function Home() {
             );
           })}
         </div>
-      </section>  
+      </section>
+      
+      {/* ================= TRENDING NOW ================= */}
+      <section className="product-section">
+        <div className="section-header">
+          <div>
+            <h2>Trending Now</h2>
+            <span className="sub">WHAT EVERYONE'S WEARING</span>
+          </div>
+          <Link to="#" className="view-all">View All →</Link>
+        </div>
+
+        <div className="products-grid">
+          {trendingProducts.map((product) => {
+            const isWishlisted = wishlist.some((item) => item.id === product.id);
+            const isCarted = cart.some((item) => item.id === product.id);
+
+            return (
+              <div 
+                key={product.id} 
+                className={`product-card ${activeQuickView === product.id ? "show-quick" : ""}`}
+                onClick={(e) => {
+                  if (window.matchMedia("(hover: none)").matches) {
+                    if (activeQuickView !== product.id) {
+                      e.preventDefault();
+                      setActiveQuickView(product.id);
+                      return;
+                    }
+                  }
+                  openProduct(product.id);
+                }}
+              >
+                <div className="product-image">
+                  
+                  {/* Trending Badge */}
+                  {product.badgeText && (
+                    <span className="badge trending">{product.badgeText}</span>
+                  )}
+
+                  {/* Wishlist */}
+                  <div 
+                    className={`icon-wrapper wishlist-icon-filled ${isWishlisted ? "active" : ""}`}
+                    onClick={(e) => toggleWishlist(e, product)}
+                  >
+                    <img src={wishlistIconFilled} alt="Wishlist" />
+                  </div>
+
+                  {/* Cart */}
+                  <div 
+                    className={`icon-wrapper cart-icon ${isCarted ? "added" : ""}`}
+                    onClick={(e) => toggleCart(e, product)}
+                  >
+                    <img src={cartIcon} alt="Cart" />
+                  </div>
+
+                  <img src={product.image} className="product-img" alt={product.name} />
+                  <button className="quick-view">Quick View</button>
+                </div>
+
+                <div className="product-info">
+                  <div className="price-row">
+                    <div className="price-group">
+                      <span className="price">₹{product.price}</span>
+                      <span className="old-price">₹{product.oldPrice}</span>
+                    </div>
+                    <div className="rating">
+                      <img src={starIcon} className="star-icon" alt="Star" />
+                      <span className="rating-value">{product.rating} </span>
+                      <span className="rating-count">({product.reviews})</span>
+                    </div>
+                  </div>
+                  <h4>{product.name}</h4>
+                  <p className="category">{product.category}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
     </>
   );
 }
