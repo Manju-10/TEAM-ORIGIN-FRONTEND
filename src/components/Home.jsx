@@ -42,6 +42,7 @@ import trendingImg1 from "../assets/trending_img_1.jpg";
 import trendingImg2 from "../assets/trending_img_2.jpg";
 import trendingImg3 from "../assets/trending_img_3.jpg";
 import trendingImg4 from "../assets/trending_img_4.png";
+import dropsIcon from "../assets/drops_icon.svg";
 
 function Home() {
   // --- STATE FOR HERO SLIDER ---
@@ -122,6 +123,14 @@ function Home() {
   const openProduct = (productId) => {
     localStorage.setItem("selectedProduct", productId);
     navigate("/product"); // Ensure you have a route set up for "/product"
+  };
+
+  // --- SCROLL TO CATEGORY FUNCTION ---
+  const scrollToCategory = () => {
+    const section = document.getElementById("categorySection");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
   };
  
   // New Arrivals Product Data Array
@@ -404,7 +413,7 @@ function Home() {
       </section>
       
       {/* ================= SHOP BY CATEGORY ================= */}
-      <section className="shop-category">
+      <section className="shop-category" id="categorySection">
         <div className="container">
           <h2>Shop by Category</h2>
           <p className="subtitle">Find your perfect style</p>
@@ -627,8 +636,39 @@ function Home() {
           })}
         </div>
       </section>
+
+      {/* ================= EXCLUSIVE LIMITED EDITIONS ================= */}
+      <section className="exclusive-section" id="exclusive">
+        <div className="overlay"></div>
+
+        <div className="exclusive-content">
+          {/* Top Label */}
+          <div className="label">
+            <img src={dropsIcon} alt="icon" />
+            <span>ORIGIN DROPS</span>
+          </div>
+
+          {/* Main Heading */}
+          <h2>Exclusive Limited Editions</h2>
+
+          {/* Sub Text */}
+          <p>
+            Be the first to get our exclusive drops. Limited quantities, unlimited style.
+          </p>
+
+          {/* CTA Button */}
+          <button className="shop-btn" onClick={scrollToCategory}>
+            Shop the Drop →
+          </button>
+        </div>
+      </section>
+
+
+
     </>
   );
+  
+
 }
 
 export default Home;

@@ -902,6 +902,96 @@ body {
     }
 }
 
+/* ================= EXCLUSIVE LIMITED EDITIONS ================= */
+.exclusive-section {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Background Image */
+.exclusive-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* Vite perfectly handles relative paths like this in CSS! */
+    background: url("../assets/exclusive_bgd_img.png") center/cover no-repeat;
+    z-index: 0;
+}
+
+/* Dark Overlay */
+.exclusive-section .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1;
+}
+
+/* Content */
+.exclusive-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 650px;
+    padding: 0 20px;
+}
+
+/* Label */
+.label {
+    display: inline-flex;
+    font-family: poppins, sans-serif;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #FFC96C;
+    margin-bottom: 10px;
+}
+
+.label img {
+    width: 14px;
+}
+
+/* Heading */
+.exclusive-content h2 {
+    font-family: 'Gloock', serif;
+    font-size: 42px;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+/* Paragraph */
+.exclusive-content p {
+    font-size: 14px;
+    color: #ddd;
+    margin-bottom: 25px;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: poppins, sans-serif;
+}
+
+/* Button */
+.shop-btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #D99726, #FFC96C);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.shop-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
 /* ================= TABLET VIEW ================= */
 @media (max-width: 1024px) and (min-width: 769px) {
     .mobile-top {
@@ -990,6 +1080,20 @@ body {
         font-size: 12px;
     }
 
+    /* EXCLUSIVE LIMITED EDITIONS*/
+    .exclusive-section {
+        height: 380px;
+    }
+
+    .exclusive-content h2 {
+        font-size: 40px;
+    }
+
+    .exclusive-content p {
+        font-size: 13px;
+        max-width: 350px;
+    }
+
 
 }
 
@@ -1045,7 +1149,6 @@ body {
 }
 
 /* ================= MOBILE VIEW ================= */
-
 @media (max-width: 768px) {
 
     .search-desktop,
@@ -1220,6 +1323,31 @@ body {
 
     .view-all {
         font-size: 12px;
+    }
+
+    /* EXCLUSIVE LIMITED EDITIONS*/
+    .exclusive-section {
+        height: 480px;
+        padding: 40px 0;
+    }
+
+    .exclusive-content {
+        max-width: 90%;
+    }
+
+    .exclusive-content h2 {
+        font-size: 40px;
+    }
+
+    .exclusive-content p {
+        font-size: 13px;
+        line-height: 1.6;
+        max-width: 350px;
+    }
+
+    .shop-btn {
+        width: 80%;
+        max-width: 260px;
     }
 
 }
