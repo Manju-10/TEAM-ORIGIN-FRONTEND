@@ -263,12 +263,25 @@ function Home() {
   // --- TESTIMONIALS STATE & LOGIC ---
   const carouselRef = useRef(null);
 
+  // ==============================================================
+  // FOR FUTURE LAUNCH (DATABASE CONNECTION):
+  // When you connect a database (like Firebase or MongoDB), 
+  // replace the hardcoded array below with an empty array: useState([])
+  // and fetch the real reviews inside a useEffect hook.
+  // ==============================================================
+
   // 1. Initial Hardcoded Reviews
   const [reviews, setReviews] = useState([
     { id: 1, name: "Priya M", location: "Bangalore", rating: 5, text: "Absolutely love the quality! Best T-Shirt I have ever purchased. The fabric feels premium and the fit is perfect. Will definitely order more.", image: productImg1, initial: "P" },
     { id: 2, name: "Rahul R", location: "Chennai", rating: 5, text: "The minimalist design is exactly what I was looking for. Highly recommend!", image: null, initial: "R" },
     { id: 3, name: "Sneha V", location: "Mumbai", rating: 4, text: "Great packaging and fast delivery. The oversized fit is super comfortable.", image: null, initial: "S" }
   ]);
+
+  // ==============================================================
+  // FOR FUTURE LAUNCH (DATABASE CONNECTION):
+  // Change the starting state to: useState({ count: 0, sum: 0 });
+  // so your store starts fresh at 0 reviews.
+  // ==============================================================
 
   // 2. Math for Overall Rating
   const [stats, setStats] = useState({ count: 26, sum: 117 }); // 112 reviews * 4.5 avg = 504
