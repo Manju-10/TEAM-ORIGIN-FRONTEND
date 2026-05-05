@@ -992,6 +992,266 @@ body {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* ================= FEATURED COLLECTIONS ================= */
+.featured-collections {
+    padding: 60px 5%;
+    background: var(--light-bg);
+}
+
+.fc-header {
+    margin-bottom: 30px;
+}
+
+/* GRID */
+.fc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: stretch;
+}
+
+/* LEFT BIG CARD */
+.fc-left-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.fc-left-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* OVERLAY */
+.fc-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 25px;
+    color: white;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2), transparent);
+}
+
+/* BADGE */
+.fc-badge {
+    background: var(--primary);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    width: fit-content;
+    margin-bottom: 10px;
+}
+
+/* TEXT */
+.fc-overlay h3 {
+    font-family: 'Gloock', serif;
+    font-size: 40px;
+}
+
+.fc-overlay p {
+    font-size: 14px;
+    margin: 5px 0 10px;
+}
+
+.fc-link {
+    font-size: 13px;
+    color: var(--accent);
+}
+
+/* RIGHT SIDE */
+.fc-right {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    height: 100%;
+}
+
+/* SMALL CARDS */
+.fc-small-card {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.fc-small-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.fc-small-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* REMOVE EXTRA GAP FROM IMAGE */
+}
+
+/* CONTENT */
+.fc-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.fc-content h4 {
+    font-family: 'Gloock', serif;
+    font-size: 26px;
+}
+
+.fc-content p {
+    font-size: 14px;
+    color: var(--dark-gray);
+    margin: 5px 0;
+}
+
+.fc-content a {
+    font-size: 13px;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* Make only links clickable */
+.fc-link,
+.fc-content a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Optional hover underline */
+.fc-link:hover,
+.fc-content a:hover {
+    text-decoration: underline;
+}
+
+/* ================= RESPONSIVE ================= */
+.badge.bestseller {
+    top: 12px;
+    background: #FDF3E1;
+    /* Soft yellow background */
+    color: var(--primary);
+    /* Golden text */
+    min-width: 75px;
+    padding: 0 10px;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+}
+
+/* ================= FLASH SALE BANNER ================= */
+.flash-sale-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to right, #202329, #565656);
+    padding: 15px 5%;
+    color: var(--white);
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Left Section */
+.flash-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.flash-icon-box {
+    background: rgba(217, 151, 38, 0.15);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.flash-icon-box img {
+    width: 24px;
+    height: 24px;
+}
+
+.flash-text h3 {
+    font-family: 'Gloock', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 2px;
+}
+
+.flash-text p {
+    font-size: 13px;
+    color: #e0e0e0;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Timer Section */
+.flash-timer {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.time-box-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.time-box {
+    background: rgba(255, 255, 255, 0.12);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'Gloock', serif;
+    min-width: 45px;
+    text-align: center;
+}
+
+.time-label {
+    font-size: 11px;
+    color: #A0A0A0;
+}
+
+.colon {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+/* Button Section */
+.flash-shop-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.flash-shop-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(217, 151, 38, 0.3);
+}
+
+
+
+
+/* ================= RESPONSIVE ================= */
+
 /* ================= TABLET VIEW ================= */
 @media (max-width: 1024px) and (min-width: 769px) {
     .mobile-top {
@@ -1092,6 +1352,55 @@ body {
     .exclusive-content p {
         font-size: 13px;
         max-width: 350px;
+    }
+
+    /*  FEATURED COLLECTIONS */
+    .fc-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .fc-left-card {
+        height: 100%;
+    }
+
+    .fc-overlay h3 {
+        font-size: 36px;
+    }
+
+    /* FLASH SALE */
+    .flash-sale-banner {
+        flex-wrap: nowrap;
+        padding: 12px 4%;
+        gap: 10px;
+    }
+
+    .flash-left {
+        gap: 10px;
+    }
+
+    .flash-text h3 {
+        font-size: 18px;
+    }
+
+    .flash-text p {
+        font-size: 11px;
+    }
+
+    .time-box {
+        padding: 6px 10px;
+        font-size: 15px;
+        min-width: 40px;
+    }
+
+    .colon {
+        font-size: 16px;
+        margin-top: 4px;
+    }
+
+    .flash-shop-btn {
+        padding: 10px 16px;
+        font-size: 12px;
+        white-space: nowrap;
     }
 
 
@@ -1350,6 +1659,78 @@ body {
         max-width: 260px;
     }
 
+    /* FEATURED COLLECTIONS */
+    .fc-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .fc-right {
+        grid-template-rows: auto;
+    }
+
+    .fc-small-card {
+        grid-template-columns: 30% 70%;
+    }
+
+    .fc-left-card {
+        height: 260px;
+    }
+
+    /* TEXT */
+    .fc-overlay h3 {
+        font-size: 28px;
+    }
+
+    .fc-overlay p {
+        font-size: 13px;
+        margin: 5px 0 10px;
+    }
+
+    .fc-link {
+        font-size: 13px;
+    }
+
+    /* FLASH SALE */
+    .flash-sale-banner {
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        gap: 18px;
+    }
+
+    .flash-left {
+        width: 100%;
+        justify-content: center;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .flash-text h3 {
+        font-size: 30px;
+    }
+
+    .flash-timer {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .flash-right {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .flash-shop-btn {
+        width: 70%;
+        max-width: 300px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+
+    .time-box {
+        font-size: 20px;
+        padding: 10px 14px;
+    }
 }
 
 /* ================= SMALL MOBILE VIEW ================= */

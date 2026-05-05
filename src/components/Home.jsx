@@ -43,6 +43,10 @@ import trendingImg2 from "../assets/trending_img_2.jpg";
 import trendingImg3 from "../assets/trending_img_3.jpg";
 import trendingImg4 from "../assets/trending_img_4.png";
 import dropsIcon from "../assets/drops_icon.svg";
+import fcImg1 from "../assets/fc-img-1.png";
+import fcImg2 from "../assets/fc-img-2.png";
+import fcImg3 from "../assets/fc-img-3.png";
+import flashSaleIcon from "../assets/Flash_Sale_icon.svg";
 
 function Home() {
   // --- STATE FOR HERO SLIDER ---
@@ -132,6 +136,49 @@ function Home() {
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  // --- FLASH SALE TIMER STATE & LOGIC ---
+  const [timeLeft, setTimeLeft] = useState({ days: "02", hours: "14", minutes: "32", seconds: "00" });
+
+  useEffect(() => {
+    // Set target time (2 days, 14 hours, 32 mins from load)
+    const flashSaleEnd = new Date();
+    flashSaleEnd.setDate(flashSaleEnd.getDate() + 2);
+    flashSaleEnd.setHours(flashSaleEnd.getHours() + 14);
+    flashSaleEnd.setMinutes(flashSaleEnd.getMinutes() + 32);
+    const targetTime = flashSaleEnd.getTime();
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetTime - now;
+
+      // If the sale is over, clear the timer
+      if (distance < 0) {
+        setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
+        clearInterval(interval);
+        return;
+      }
+
+      // Calculate time left
+      const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Format with leading zeros
+      const formatTime = (time) => (time < 10 ? `0${time}` : time.toString());
+
+      setTimeLeft({
+        days: formatTime(d),
+        hours: formatTime(h),
+        minutes: formatTime(m),
+        seconds: formatTime(s)
+      });
+    }, 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
  
   // New Arrivals Product Data Array
   const newArrivals = [
@@ -170,6 +217,26 @@ function Home() {
     { 
       id: "t4", name: "White Minimal", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "117", image: trendingImg4, category: "Women",
       badgeText: "TRENDING" 
+    }
+  ];
+
+  // Best Sellers Product Data Array
+  const bestSellers = [
+    { 
+      id: "b1", name: "Forest Green Minimal", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "117", image: productImg1, category: "Men",
+      badgeText: "BESTSELLER" // Custom badge text
+    },
+    { 
+      id: "b2", name: "White Hotel", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "117", image: productImg4, category: "Men",
+      badgeText: "BESTSELLER" 
+    },
+    { 
+      id: "b3", name: "Grey Essential", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "117", image: trendingImg2, category: "Men",
+      badgeText: "BESTSELLER" 
+    },
+    { 
+      id: "b4", name: "Stay Wild Graphic", price: "589.0", oldPrice: "650", rating: "4.7", reviews: "117", image: trendingImg3, category: "Men",
+      badgeText: "BESTSELLER" 
     }
   ];
 
@@ -659,6 +726,187 @@ function Home() {
           {/* CTA Button */}
           <button className="shop-btn" onClick={scrollToCategory}>
             Shop the Drop →
+          </button>
+        </div>
+      </section>
+
+      {/* ================= FEATURED COLLECTIONS ================= */}
+      <section className="featured-collections">
+        <div className="container">
+          
+          {/* Header */}
+          <div className="section-header fc-header">
+            <div>
+              <h2>Featured Collections</h2>
+              <span className="sub">COLLECTIONS</span>
+            </div>
+          </div>
+
+          <div className="fc-grid">
+            
+            {/* LEFT BIG CARD */}
+            <div className="fc-left-card">
+              <img src={fcImg1} alt="Limited Edition" />
+
+              <div className="fc-overlay">
+                <span className="fc-badge">NEW COLLECTIONS</span>
+                <h3>Limited Edition</h3>
+                <p>Exclusive pieces, limited quantities</p>
+
+                {/* ONLY THIS IS CLICKABLE */}
+                <Link to="#" className="fc-link">Shop Now →</Link>
+              </div>
+            </div>
+
+            {/* RIGHT SIDE */}
+            <div className="fc-right">
+              
+              {/* CARD 1 */}
+              <div className="fc-small-card">
+                <img src={fcImg2} alt="Minimal Wear" />
+
+                <div className="fc-content">
+                  <h4>Minimal Wear</h4>
+                  <p>Less is more</p>
+
+                  {/* ONLY CLICKABLE */}
+                  <Link to="#">Explore →</Link>
+                </div>
+              </div>
+
+              {/* CARD 2 */}
+              <div className="fc-small-card">
+                <img src={fcImg3} alt="Classic Originals" />
+
+                <div className="fc-content">
+                  <h4>Classic Originals</h4>
+                  <p>Timeless essentials</p>
+
+                  {/* ONLY CLICKABLE */}
+                  <Link to="#">Explore →</Link>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= BEST SELLERS ================= */}
+      <section className="product-section">
+        <div className="section-header">
+          <div>
+            <h2>Best Sellers</h2>
+            <span className="sub">MOST LOVED BY OUR CUSTOMERS</span>
+          </div>
+          <Link to="#" className="view-all">View All →</Link>
+        </div>
+
+        <div className="products-grid">
+          {bestSellers.map((product) => {
+            const isWishlisted = wishlist.some((item) => item.id === product.id);
+            const isCarted = cart.some((item) => item.id === product.id);
+
+            return (
+              <div 
+                key={product.id} 
+                className={`product-card ${activeQuickView === product.id ? "show-quick" : ""}`}
+                onClick={(e) => {
+                  if (window.matchMedia("(hover: none)").matches) {
+                    if (activeQuickView !== product.id) {
+                      e.preventDefault();
+                      setActiveQuickView(product.id);
+                      return;
+                    }
+                  }
+                  openProduct(product.id);
+                }}
+              >
+                <div className="product-image">
+                  
+                  {/* Bestseller Badge */}
+                  {product.badgeText && (
+                    <span className="badge bestseller">{product.badgeText}</span>
+                  )}
+
+                  {/* Wishlist */}
+                  <div 
+                    className={`icon-wrapper wishlist-icon-filled ${isWishlisted ? "active" : ""}`}
+                    onClick={(e) => toggleWishlist(e, product)}
+                  >
+                    <img src={wishlistIconFilled} alt="Wishlist" />
+                  </div>
+
+                  {/* Cart */}
+                  <div 
+                    className={`icon-wrapper cart-icon ${isCarted ? "added" : ""}`}
+                    onClick={(e) => toggleCart(e, product)}
+                  >
+                    <img src={cartIcon} alt="Cart" />
+                  </div>
+
+                  <img src={product.image} className="product-img" alt={product.name} />
+                  <button className="quick-view">Quick View</button>
+                </div>
+
+                <div className="product-info">
+                  <div className="price-row">
+                    <div className="price-group">
+                      <span className="price">₹{product.price}</span>
+                      <span className="old-price">₹{product.oldPrice}</span>
+                    </div>
+                    <div className="rating">
+                      <img src={starIcon} className="star-icon" alt="Star" />
+                      <span className="rating-value">{product.rating} </span>
+                      <span className="rating-count">({product.reviews})</span>
+                    </div>
+                  </div>
+                  <h4>{product.name}</h4>
+                  <p className="category">{product.category}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ================= FLASH SALE BANNER ================= */}
+      <section className="flash-sale-banner">
+        <div className="flash-left">
+          <div className="flash-icon-box">
+            <img src={flashSaleIcon} alt="Flash Sale Icon" />
+          </div>
+          <div className="flash-text">
+            <h3>Flash Sale Live!</h3>
+            <p>Up to 40% off on selected styles</p>
+          </div>
+        </div>
+
+        <div className="flash-timer">
+          <div className="time-box-wrapper">
+            <div className="time-box">{timeLeft.days}</div>
+            <span className="time-label">Days</span>
+          </div>
+          <span className="colon">:</span>
+          <div className="time-box-wrapper">
+            <div className="time-box">{timeLeft.hours}</div>
+            <span className="time-label">Hours</span>
+          </div>
+          <span className="colon">:</span>
+          <div className="time-box-wrapper">
+            <div className="time-box">{timeLeft.minutes}</div>
+            <span className="time-label">Mins</span>
+          </div>
+          <span className="colon">:</span>
+          <div className="time-box-wrapper">
+            <div className="time-box">{timeLeft.seconds}</div>
+            <span className="time-label">Secs</span>
+          </div>
+        </div>
+
+        <div className="flash-right">
+          <button className="flash-shop-btn" onClick={() => navigate("/shop")}>
+            Shop the Drop &rarr;
           </button>
         </div>
       </section>
