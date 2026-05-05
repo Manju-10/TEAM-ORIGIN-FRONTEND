@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/home.css";
 
@@ -136,49 +136,6 @@ function Home() {
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-  // --- FLASH SALE TIMER STATE & LOGIC ---
-  const [timeLeft, setTimeLeft] = useState({ days: "02", hours: "14", minutes: "32", seconds: "00" });
-
-  useEffect(() => {
-    // Set target time (2 days, 14 hours, 32 mins from load)
-    const flashSaleEnd = new Date();
-    flashSaleEnd.setDate(flashSaleEnd.getDate() + 2);
-    flashSaleEnd.setHours(flashSaleEnd.getHours() + 14);
-    flashSaleEnd.setMinutes(flashSaleEnd.getMinutes() + 32);
-    const targetTime = flashSaleEnd.getTime();
-
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetTime - now;
-
-      // If the sale is over, clear the timer
-      if (distance < 0) {
-        setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
-        clearInterval(interval);
-        return;
-      }
-
-      // Calculate time left
-      const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-      // Format with leading zeros
-      const formatTime = (time) => (time < 10 ? `0${time}` : time.toString());
-
-      setTimeLeft({
-        days: formatTime(d),
-        hours: formatTime(h),
-        minutes: formatTime(m),
-        seconds: formatTime(s)
-      });
-    }, 1000);
-
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
  
   // New Arrivals Product Data Array
   const newArrivals = [
@@ -258,6 +215,121 @@ function Home() {
 
     // Close Modal
     setIsModalOpen(false);
+  };
+
+  // --- FLASH SALE TIMER STATE & LOGIC ---
+  const [timeLeft, setTimeLeft] = useState({ days: "02", hours: "14", minutes: "32", seconds: "00" });
+
+  useEffect(() => {
+    // Set target time (2 days, 14 hours, 32 mins from load)
+    const flashSaleEnd = new Date();
+    flashSaleEnd.setDate(flashSaleEnd.getDate() + 2);
+    flashSaleEnd.setHours(flashSaleEnd.getHours() + 14);
+    flashSaleEnd.setMinutes(flashSaleEnd.getMinutes() + 32);
+    const targetTime = flashSaleEnd.getTime();
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetTime - now;
+
+      // If the sale is over, clear the timer
+      if (distance < 0) {
+        setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
+        clearInterval(interval);
+        return;
+      }
+
+      // Calculate time left
+      const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Format with leading zeros
+      const formatTime = (time) => (time < 10 ? `0${time}` : time.toString());
+
+      setTimeLeft({
+        days: formatTime(d),
+        hours: formatTime(h),
+        minutes: formatTime(m),
+        seconds: formatTime(s)
+      });
+    }, 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
+
+  // --- TESTIMONIALS STATE & LOGIC ---
+  const carouselRef = useRef(null);
+
+  // 1. Initial Hardcoded Reviews
+  const [reviews, setReviews] = useState([
+    { id: 1, name: "Priya M", location: "Bangalore", rating: 5, text: "Absolutely love the quality! Best T-Shirt I have ever purchased. The fabric feels premium and the fit is perfect. Will definitely order more.", image: productImg1, initial: "P" },
+    { id: 2, name: "Rahul R", location: "Chennai", rating: 5, text: "The minimalist design is exactly what I was looking for. Highly recommend!", image: null, initial: "R" },
+    { id: 3, name: "Sneha V", location: "Mumbai", rating: 4, text: "Great packaging and fast delivery. The oversized fit is super comfortable.", image: null, initial: "S" }
+  ]);
+
+  // 2. Math for Overall Rating
+  const [stats, setStats] = useState({ count: 26, sum: 117 }); // 112 reviews * 4.5 avg = 504
+  const averageRating = (stats.sum / stats.count).toFixed(1);
+  const starPercentage = (averageRating / 5) * 100;
+
+  // 3. Modals & Form State
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [lightbox, setLightbox] = useState({ isOpen: false, src: "" });
+  const [newReview, setNewReview] = useState({ name: "", location: "", text: "", rating: 0, image: null, imageName: "Click here to upload photos" });
+  const [hoverRating, setHoverRating] = useState(0); // For the interactive stars
+
+  // Carousel Scrolling
+  const scrollCarousel = (direction) => {
+    if (carouselRef.current) {
+      const scrollAmount = carouselRef.current.clientWidth;
+      carouselRef.current.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
+    }
+  };
+
+  // Handle Image Upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewReview({ ...newReview, image: URL.createObjectURL(file), imageName: file.name });
+    }
+  };
+
+  // Submit New Review
+  const submitReview = () => {
+    if (!newReview.name || !newReview.location || !newReview.text || newReview.rating === 0) {
+      alert("Please provide a name, location, rating, and review text.");
+      return;
+    }
+
+    const newReviewObj = {
+      id: Date.now(),
+      name: newReview.name,
+      location: newReview.location,
+      rating: newReview.rating,
+      text: newReview.text,
+      image: newReview.image,
+      initial: newReview.name.charAt(0).toUpperCase()
+    };
+
+    // Update Arrays & Math
+    setReviews([newReviewObj, ...reviews]);
+    setStats({ count: stats.count + 1, sum: stats.sum + newReview.rating });
+
+    // Reset and Close
+    setIsReviewModalOpen(false);
+    setNewReview({ name: "", location: "", text: "", rating: 0, image: null, imageName: "Click here to upload photos" });
+    setHoverRating(0);
+
+    // --- THE FIX ---
+    // Wait a tiny fraction of a second for React to render the new card, THEN scroll!
+    setTimeout(() => {
+      if (carouselRef.current) {
+        carouselRef.current.scrollTo({ left: 0, behavior: "smooth" });
+      }
+    }, 100); 
   };
 
   return (
@@ -911,6 +983,113 @@ function Home() {
         </div>
       </section>
 
+      {/* ================= TESTIMONIALS ================= */}
+      <section className="testimonials-section">
+        <div className="testi-header">
+          <h2 className="testi-title">What Our Customers Say</h2>
+          
+          <div className="testi-info-row">
+            <div className="testi-left-info">
+              <p className="testi-subtitle">Real reviews from real people</p>
+              <div className="overall-rating">
+                <span className="rating-number">{averageRating}</span>
+                <div className="smooth-stars-outer">
+                  <div className="smooth-stars-inner" style={{ width: `${starPercentage}%` }}></div>
+                </div>
+                <span className="total-reviews">Over {stats.count} Reviews</span>
+              </div>
+            </div>
+
+            <button className="write-review-btn" onClick={() => setIsReviewModalOpen(true)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              Write a Review
+            </button>
+          </div>
+        </div>
+
+        <div className="carousel-wrapper">
+          <button className="carousel-btn left-btn" onClick={() => scrollCarousel("left")}>&#10094;</button>
+          
+          <div className="carousel-track" ref={carouselRef}>
+            {reviews.map((rev) => (
+              <div className="review-card" key={rev.id}>
+                <div className="reviewer-info">
+                  <div className="avatar">{rev.initial}</div>
+                  <div>
+                    <h4>{rev.name}</h4>
+                    <span className="location">{rev.location}</span>
+                  </div>
+                </div>
+                <div className="review-stars">
+                  {/* Generate stars based on rating */}
+                  {"★".repeat(rev.rating).padEnd(5, "☆")}
+                </div>
+                <p className="review-text">{rev.text}</p>
+                {rev.image && (
+                  <img 
+                    src={rev.image} 
+                    className="review-image-thumb" 
+                    onClick={() => setLightbox({ isOpen: true, src: rev.image })} 
+                    alt="Customer Review" 
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          
+          <button className="carousel-btn right-btn" onClick={() => scrollCarousel("right")}>&#10095;</button>
+        </div>
+      </section>
+
+      {/* ================= WRITE A REVIEW MODAL ================= */}
+      {isReviewModalOpen && (
+        <div className="modal" style={{ display: "flex" }} onClick={(e) => e.target.className === "modal" && setIsReviewModalOpen(false)}>
+          <div className="review-modal-content">
+            <span className="close" onClick={() => setIsReviewModalOpen(false)}>&times;</span>
+            <h2 className="review-title">Write a Review</h2>
+            <p className="modal-sub">We value your feedback</p>
+
+            {/* Interactive Stars */}
+            <div className="interactive-stars" onMouseLeave={() => setHoverRating(0)}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <svg 
+                  key={star}
+                  viewBox="0 0 24 24" 
+                  className={(hoverRating || newReview.rating) >= star ? "active" : ""}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onClick={() => setNewReview({ ...newReview, rating: star })}
+                >
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              ))}
+            </div>
+
+            {/* Form Details */}
+            <input type="text" placeholder="Your Name" className="review-input" value={newReview.name} onChange={(e) => setNewReview({ ...newReview, name: e.target.value })} />
+            <input type="text" placeholder="Your Location (e.g., Chennai)" className="review-input" value={newReview.location} onChange={(e) => setNewReview({ ...newReview, location: e.target.value })} />
+            <textarea placeholder="Please share your experience with us..." className="review-textarea" value={newReview.text} onChange={(e) => setNewReview({ ...newReview, text: e.target.value })}></textarea>
+
+            {/* Custom Image Upload */}
+            <div className="upload-wrapper">
+              <input type="file" id="reviewImageUpload" accept="image/*" hidden onChange={handleImageUpload} />
+              <label htmlFor="reviewImageUpload" className="upload-label">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <span>{newReview.imageName}</span>
+              </label>
+            </div>
+
+            <button className="submit-review-btn" onClick={submitReview}>Submit your Review</button>
+          </div>
+        </div>
+      )}
+
+      {/* ================= IMAGE LIGHTBOX MODAL ================= */}
+      {lightbox.isOpen && (
+        <div className="modal" style={{ display: "flex" }} onClick={(e) => e.target.className === "modal" && setLightbox({ isOpen: false, src: "" })}>
+          <span className="close lightbox-close" onClick={() => setLightbox({ isOpen: false, src: "" })}>&times;</span>
+          <img src={lightbox.src} className="lightbox-content" alt="Enlarged Review" />
+        </div>
+      )}
 
 
     </>
