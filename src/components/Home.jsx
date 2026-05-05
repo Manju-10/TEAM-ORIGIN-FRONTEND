@@ -47,6 +47,15 @@ import fcImg1 from "../assets/fc-img-1.png";
 import fcImg2 from "../assets/fc-img-2.png";
 import fcImg3 from "../assets/fc-img-3.png";
 import flashSaleIcon from "../assets/Flash_Sale_icon.svg";
+// Add these right below your other imports
+import logoWhite from "../assets/logo_white.svg";
+import instagramIcon from "../assets/logo-instagram.svg";
+import facebookIcon from "../assets/logo-facebook.svg";
+import twitterIcon from "../assets/logo-twitter.svg";
+import youtubeIcon from "../assets/logo-youtube.svg";
+import emailIcon from "../assets/email_icon.svg";
+import phoneIcon from "../assets/phone_icon.svg";
+
 
 function Home() {
   // --- STATE FOR HERO SLIDER ---
@@ -343,6 +352,22 @@ function Home() {
         carouselRef.current.scrollTo({ left: 0, behavior: "smooth" });
       }
     }, 100); 
+  };
+
+  // --- FOOTER SMOOTH SCROLL ---
+  const handleFooterScroll = (e, targetId) => {
+    e.preventDefault();
+    const targetSection = document.querySelector(targetId);
+    if (targetSection) {
+      const headerOffset = 80;
+      const elementPosition = targetSection.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
   };
 
   return (
@@ -1103,6 +1128,112 @@ function Home() {
           <img src={lightbox.src} className="lightbox-content" alt="Enlarged Review" />
         </div>
       )}
+
+      {/* ================= FOOTER ================= */}
+      <footer className="site-footer">
+        
+        {/* Newsletter Section */}
+        <div className="footer-newsletter">
+          <h2 className="gloock">Join the ORIGIN Family</h2>
+          <h4>Stay Updated</h4>
+          <p>Subscribe to get exclusive offers, new drops, and styling tips delivered to your inbox.</p>
+          
+          <form className="subscribe-form" onSubmit={(e) => e.preventDefault()}>
+            <input type="email" placeholder="Enter your email" required />
+            <button type="submit" className="subscribe-btn">Subscribe</button>
+          </form>
+        </div>
+
+        {/* Divider */}
+        <hr className="footer-divider" />
+
+        {/* Main Footer Content */}
+        <div className="footer-content">
+          
+          {/* Column 1: Brand & Socials */}
+          <div className="footer-col brand-col">
+            <img src={logoWhite} alt="ORIGIN" className="footer-logo" />
+            <p>Premium quality t-shirts crafted with care. Where style meets comfort and elegance begins.</p>
+            
+            <div className="social-icons">
+              <a href="https://instagram.com" target="_blank" rel="noreferrer"><img src={instagramIcon} alt="Instagram" /></a>
+              <a href="https://facebook.com" target="_blank" rel="noreferrer"><img src={facebookIcon} alt="Facebook" /></a>
+              <a href="https://twitter.com" target="_blank" rel="noreferrer"><img src={twitterIcon} alt="Twitter" /></a>
+              <a href="https://youtube.com" target="_blank" rel="noreferrer"><img src={youtubeIcon} alt="YouTube" /></a>
+            </div>
+          </div>
+
+          {/* Column 2: Quick Links (Smooth Scroll) */}
+          <div className="footer-col quick-links">
+            <h4>Quick Links</h4>
+            <ul>
+              {/* Tip: Make sure to add id="New-Arrivals" and id="Trending" to your sections above for these to work! */}
+              <li><a href="#New-Arrivals" onClick={(e) => handleFooterScroll(e, '#New-Arrivals')}>New Arrivals</a></li>
+              <li><a href="#Trending" onClick={(e) => handleFooterScroll(e, '#Trending')}>Trending</a></li>
+              <li><a href="#categorySection" onClick={(e) => handleFooterScroll(e, '#categorySection')}>Men</a></li>
+              <li><a href="#categorySection" onClick={(e) => handleFooterScroll(e, '#categorySection')}>Women</a></li>
+              <li><a href="#categorySection" onClick={(e) => handleFooterScroll(e, '#categorySection')}>Kids</a></li>
+              <li><a href="#categorySection" onClick={(e) => handleFooterScroll(e, '#categorySection')}>Oversized</a></li>
+              <li><a href="#categorySection" onClick={(e) => handleFooterScroll(e, '#categorySection')}>Minimal</a></li>
+              <li><a href="#categorySection" onClick={(e) => handleFooterScroll(e, '#categorySection')}>Printed</a></li>
+              <li><a href="#bestsellers" onClick={(e) => handleFooterScroll(e, '#bestsellers')}>Bestsellers</a></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Support */}
+          <div className="footer-col">
+            <h4>Support</h4>
+            <ul>
+              <li><a href="/assets/FAQ.pdf" target="_blank" rel="noreferrer">FAQ</a></li>
+              <li><a href="/assets/Shipping_Policy.pdf" target="_blank" rel="noreferrer">Shipping Policy</a></li>
+              <li><a href="/assets/Returns_Refunds.pdf" target="_blank" rel="noreferrer">Returns & Refunds</a></li>
+              <li><a href="/assets/Track_Order.pdf" target="_blank" rel="noreferrer">Track Order</a></li>
+            </ul>
+          </div>
+
+          {/* Column 4: Company */}
+          <div className="footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="/assets/About_ORIGIN.pdf" target="_blank" rel="noreferrer">About ORIGIN</a></li>
+              <li><a href="/assets/Our_Story.pdf" target="_blank" rel="noreferrer">Our Story</a></li>
+            </ul>
+          </div>
+
+          {/* Column 5: Contact */}
+          <div className="footer-col contact-col">
+            <h4>Contact</h4>
+            <ul>
+              <li>
+                <img src={emailIcon} alt="Email" style={{ marginTop: "4px" }} />
+                <span>originofficial@gmail.com</span>
+              </li>
+              <li>
+                <img src={phoneIcon} alt="Phone" />
+                <span>+91 98765 43210</span>
+              </li>
+              <li>
+                <img src={locationIcon} alt="Location" />
+                <span>No: 10, Fashion street, Chennai - 600052, India.</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* Divider */}
+        <hr className="footer-divider" />
+
+        {/* Bottom Copyright & Legal */}
+        <div className="footer-bottom">
+          <p>2026 ORIGIN. All rights reserved</p>
+          <div className="legal-links">
+            <a href="/assets/Privacy_Policy.pdf" target="_blank" rel="noreferrer">Privacy Policy</a>
+            <a href="/assets/Terms_Conditions.pdf" target="_blank" rel="noreferrer">Terms & Conditions</a>
+            <a href="/assets/Cookie_Policy.pdf" target="_blank" rel="noreferrer">Cookie Policy</a>
+          </div>
+        </div>
+      </footer>
 
 
     </>
