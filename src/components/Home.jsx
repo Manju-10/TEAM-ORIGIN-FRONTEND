@@ -87,10 +87,6 @@ function Home() {
     return localStorage.getItem("userAddress") || "No: 101, Main Road, Chennai";
   });
 
-  const [headerDelivery, setHeaderDelivery] = useState(() => {
-    return localStorage.getItem("deliveryAddress") || ">>> Add delivery location";
-  });
-
   // --- NEW ARRIVALS STATE & LOGIC ---
   const navigate = useNavigate();
 
@@ -145,6 +141,14 @@ function Home() {
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  // --- STATE FOR MOBILE BOTTOM NAV & SEARCH ---
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [activeBottomTab, setActiveBottomTab] = useState("home");
+  const [searchInput, setSearchInput] = useState("");
+  const [recentSearches, setRecentSearches] = useState([
+    "Classic White", "Oversized", "Minimal Design"
+  ]);
  
   // New Arrivals Product Data Array
   const newArrivals = [
@@ -218,9 +222,6 @@ function Home() {
 
     // Update Header Text
     setHeaderAddress(userAddressInput);
-    if (deliveryAddressInput.trim() !== "") {
-      setHeaderDelivery(deliveryAddressInput);
-    }
 
     // Close Modal
     setIsModalOpen(false);
@@ -375,12 +376,21 @@ function Home() {
       {/* ================= HEADER ================= */}
       <header className="header">
         <div className="header-logo">
-          <img src={logoBlack} alt="ORIGIN" />
+          {/* Wrapped the logo in a Link to go to the home page */}
+          <Link to="/">
+            <img src={logoBlack} alt="ORIGIN" />
+          </Link>
         </div>
 
-        <div className="search-desktop">
+        {/* CLICKABLE DESKTOP SEARCH */}
+        <div className="search-desktop" onClick={() => setIsSearchOpen(true)}>
           <img src={searchIcon} className="search-icon" alt="search" />
-          <input type="text" placeholder="Search your perfect drop..." />
+          <input 
+            type="text" 
+            placeholder="Search your perfect drop..." 
+            readOnly 
+            style={{ cursor: "pointer" }}
+          />
         </div>
 
         {/* CLICKABLE LOCATION */}
@@ -390,28 +400,143 @@ function Home() {
         </div>
 
         <div className="icons">
-          <Link to="#" style={{ position: "relative" }}>
+          {/* 1. Wishlist */}
+          <Link to="#" className="desktop-only-icon" style={{ position: "relative" }}>
             <img src={wishlistIcon} alt="Wishlist" />
             <span className={`nav-badge ${wishlist.length > 0 ? "show" : ""}`}>
               {wishlist.length}
             </span>
           </Link>
-          
-          <Link to="#"><img src={bellIcon} alt="Notifications" /></Link>
 
-          <Link to="#" style={{ position: "relative" }}>
+          {/* 2. Cart */}
+          <Link to="#" className="desktop-only-icon" style={{ position: "relative" }}>
             <img src={cartIcon} alt="Cart" />
             <span className={`nav-badge ${cart.length > 0 ? "show" : ""}`}>
               {cart.length}
             </span>
           </Link>
+
+          {/* 3. Notifications */}
+          <Link to="#">
+            <img src={bellIcon} alt="Notifications" />
+          </Link>
           
-          <Link to="#"><img src={userIcon} alt="User" /></Link>
+          {/* 4. Profile */}
+          <Link to="#" className="desktop-only-icon">
+            <img src={userIcon} alt="User" />
+          </Link>
+          
+          {/* 5. Menu */}
           <button className="menu-btn" onClick={() => setIsMenuOpen(true)}>
             <img src={menuIcon} alt="Menu" />
           </button>
         </div>
       </header>
+
+      {/* ================= UNIVERSAL SEARCH OVERLAY ================= */}
+      {isSearchOpen && (
+        <div className="search-overlay-fullscreen">
+          <div className="search-overlay-header">
+            <h3>Search ORIGIN</h3>
+            <button className="close-search-btn" onClick={() => {
+              setIsSearchOpen(false);
+              setActiveBottomTab("home");
+            }}>&times;</button>
+          </div>
+
+          <div className="search-input-wrapper">
+            <img src={searchIcon} className="search-icon-inside" alt="search" />
+            <input 
+              type="text" 
+              placeholder="Search for products..." 
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              autoFocus 
+            />
+          </div>
+
+          {/* Recent Searches */}
+          <div className="search-history-section">
+            <div className="section-title-row">
+              <div className="title-left">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <h4>Recent Searches</h4>
+              </div>
+              {/* Only show Clear All if there are items */}
+              {recentSearches.length > 0 && (
+                <button className="clear-search-btn" onClick={() => setRecentSearches([])}>Clear all</button>
+              )}
+            </div>
+            
+            {recentSearches.length > 0 ? (
+              <div className="search-tags">
+                {recentSearches.map((tag, index) => (
+                  <span 
+                    key={index} 
+                    className="tag-outline"
+                    onClick={() => setSearchInput(tag)}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-search-msg">
+                <p>Your search history is looking a little empty.<br/>Let's find your new favorite fit!</p>
+              </div>
+            )}
+          </div>
+
+          {/* Popular Searches */}
+          <div className="search-history-section">
+            <div className="section-title-row">
+              <div className="title-left">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                <h4>Popular Searches</h4>
+              </div>
+            </div>
+            <div className="search-tags">
+              <span className="tag-filled" onClick={() => setSearchInput("New Arrival")}>New Arrival</span>
+              <span className="tag-filled" onClick={() => setSearchInput("Classic Design")}>Classic Design</span>
+              <span className="tag-filled" onClick={() => setSearchInput("Premium Quality")}>Premium Quality</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MOBILE BOTTOM NAVIGATION ================= */}
+      <nav className="mobile-bottom-nav">
+        <div className={`bottom-nav-item ${activeBottomTab === "home" ? "active" : ""}`} onClick={() => { setActiveBottomTab("home"); setIsSearchOpen(false); window.scrollTo(0,0); }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span>Home</span>
+        </div>
+
+        <div className={`bottom-nav-item ${activeBottomTab === "wishlist" ? "active" : ""}`} onClick={() => { setActiveBottomTab("wishlist"); setIsSearchOpen(false); }}>
+          <div className="icon-badge-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            {wishlist.length > 0 && <span className="bottom-badge">{wishlist.length}</span>}
+          </div>
+          <span>Wishlist</span>
+        </div>
+
+        <div className={`bottom-nav-item ${activeBottomTab === "search" ? "active" : ""}`} onClick={() => { setActiveBottomTab("search"); setIsSearchOpen(true); }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>Search</span>
+        </div>
+
+        <div className={`bottom-nav-item ${activeBottomTab === "cart" ? "active" : ""}`} onClick={() => { setActiveBottomTab("cart"); setIsSearchOpen(false); }}>
+          <div className="icon-badge-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            {cart.length > 0 && <span className="bottom-badge">{cart.length}</span>}
+          </div>
+          <span>Cart</span>
+        </div>
+
+        <div className={`bottom-nav-item ${activeBottomTab === "profile" ? "active" : ""}`} onClick={() => { setActiveBottomTab("profile"); setIsSearchOpen(false); }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>Profile</span>
+        </div>
+      </nav>
 
       {/* ================= SIDE MENU ================= */}
       <div 
@@ -462,25 +587,7 @@ function Home() {
           </li>
         </ul>
       </div>
-
-      {/* ================= MOBILE SEARCH + LOCATION ================= */}
-      <div className="mobile-top">
-        <div className="search-mobile">
-          <img src={searchIcon} className="search-icon" alt="search" />
-          <input type="text" placeholder="Search your perfect drop..." />
-        </div>
-
-        <div className="location-mobile-row">
-          <div className="location-left" onClick={() => setIsModalOpen(true)}>
-            <img src={mapPinIcon} alt="pin" />
-            <span>{headerAddress}</span>
-          </div>
-
-          <div className="location-right" onClick={() => setIsModalOpen(true)}>
-            {headerDelivery}
-          </div>
-        </div>
-      </div>
+      
 
       {/* ================= LOCATION POP-UP ================= */}
       {isModalOpen && (
@@ -700,7 +807,8 @@ function Home() {
                     className={`icon-wrapper wishlist-icon-filled ${isWishlisted ? "active" : ""}`}
                     onClick={(e) => toggleWishlist(e, product)}
                   >
-                    <img src={wishlistIconFilled} alt="Wishlist" />
+                    {/* This single line swaps the outline icon for the solid one! */}
+                    <img src={isWishlisted ? wishlistIconFilled : wishlistIcon} alt="Wishlist" />
                   </div>
 
                   {/* Cart */}
@@ -778,7 +886,8 @@ function Home() {
                     className={`icon-wrapper wishlist-icon-filled ${isWishlisted ? "active" : ""}`}
                     onClick={(e) => toggleWishlist(e, product)}
                   >
-                    <img src={wishlistIconFilled} alt="Wishlist" />
+                    {/* This single line swaps the outline icon for the solid one! */}
+                    <img src={isWishlisted ? wishlistIconFilled : wishlistIcon} alt="Wishlist" />
                   </div>
 
                   {/* Cart */}
@@ -944,7 +1053,8 @@ function Home() {
                     className={`icon-wrapper wishlist-icon-filled ${isWishlisted ? "active" : ""}`}
                     onClick={(e) => toggleWishlist(e, product)}
                   >
-                    <img src={wishlistIconFilled} alt="Wishlist" />
+                    {/* This single line swaps the outline icon for the solid one! */}
+                    <img src={isWishlisted ? wishlistIconFilled : wishlistIcon} alt="Wishlist" />
                   </div>
 
                   {/* Cart */}
@@ -1029,13 +1139,17 @@ function Home() {
           <div className="testi-info-row">
             <div className="testi-left-info">
               <p className="testi-subtitle">Real reviews from real people</p>
+              
               <div className="overall-rating">
-                <span className="rating-number">{averageRating}</span>
-                <div className="smooth-stars-outer">
-                  <div className="smooth-stars-inner" style={{ width: `${starPercentage}%` }}></div>
+                <div className="rating-stars-row">
+                  <span className="rating-number">{averageRating}</span>
+                  <div className="smooth-stars-outer">
+                    <div className="smooth-stars-inner" style={{ width: `${starPercentage}%` }}></div>
+                  </div>
                 </div>
                 <span className="total-reviews">Over {stats.count} Reviews</span>
               </div>
+              
             </div>
 
             <button className="write-review-btn" onClick={() => setIsReviewModalOpen(true)}>
